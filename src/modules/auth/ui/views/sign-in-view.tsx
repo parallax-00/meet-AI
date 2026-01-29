@@ -1,5 +1,6 @@
 "use client";
 
+import { FaGithub, FaGoogle } from "react-icons/fa";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
@@ -21,6 +22,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { github } from "better-auth";
 
 const formSchema = z.object({
   email: z.string().email(),
@@ -61,6 +63,25 @@ export const SignInView = () => {
     );
   };
 
+  const onSocial = (provider: "google" | "github") => {
+    setError(null);
+    setPending(true);
+    authClient.signIn.social(
+      {
+        provider: provider,
+        callbackURL: "/",
+      },
+      {
+        onSuccess: () => {
+          setPending(false);
+        },
+        onError: ({ error }) => {
+          setError(error.message);
+          setPending(false);
+        },
+      },
+    );
+  };
   return (
     <div className="flex flex-col gap-6">
       <Card className="overflow-hidden p-0">
@@ -128,11 +149,29 @@ export const SignInView = () => {
                   </span>
                 </div>
                 <div className="grid grid-cols-2 gap-4">
-                  <Button variant="outline" type="button" className="w-full">
+                  <Button
+                    disabled={pending}
+                    variant="outline"
+                    type="button"
+                    className="w-full"
+                    onClick={() => {
+                      onSocial("google");
+                    }}
+                  >
                     {" "}
+                    <FaGoogle />
                     Google{" "}
                   </Button>
-                  <Button variant="outline" type="button" className="w-full ">
+                  <Button
+                    disabled={pending}
+                    variant="outline"
+                    type="button"
+                    className="w-full"
+                    onClick={() => {
+                      onSocial("github");
+                    }}
+                  >
+                    <FaGithub />
                     Github
                   </Button>
                 </div>

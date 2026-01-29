@@ -1,5 +1,6 @@
 "use client";
 
+import { FaGoogle, FaGithub, FaGoodreadsG, FaGit } from "react-icons/fa";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
@@ -57,10 +58,31 @@ export const SignUpView = () => {
         name: data.name,
         email: data.email,
         password: data.password,
+        callbackURL: "/",
       },
       {
         onSuccess: () => {
           router.push("/");
+          setPending(false);
+        },
+        onError: ({ error }) => {
+          setError(error.message);
+          setPending(false);
+        },
+      },
+    );
+  };
+
+  const onSocial = (provider: "google" | "github") => {
+    setError(null);
+    setPending(true);
+    authClient.signIn.social(
+      {
+        provider: provider,
+        callbackURL: "/",
+      },
+      {
+        onSuccess: () => {
           setPending(false);
         },
         onError: ({ error }) => {
@@ -178,11 +200,27 @@ export const SignUpView = () => {
                   </span>
                 </div>
                 <div className="grid grid-cols-2 gap-4">
-                  <Button variant="outline" type="button" className="w-full">
-                    {" "}
-                    Google{" "}
+                  <Button
+                    disabled={pending}
+                    variant="outline"
+                    type="button"
+                    className="w-full"
+                    onClick={() => {
+                      onSocial("google");
+                    }}
+                  >
+                    <FaGoogle /> Google{" "}
                   </Button>
-                  <Button variant="outline" type="button" className="w-full ">
+                  <Button
+                    disabled={pending}
+                    variant="outline"
+                    type="button"
+                    className="w-full"
+                    onClick={() => {
+                      onSocial("github");
+                    }}
+                  >
+                    <FaGithub />
                     Github
                   </Button>
                 </div>
