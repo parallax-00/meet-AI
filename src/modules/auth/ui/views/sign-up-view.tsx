@@ -236,7 +236,7 @@ export const SignUpView = () => {
               </div>
             </form>
           </Form>
-          <div className="bg-radial from-green-500 to bg-green-800 relative hidden md:flex flex-col gap-y-4 items-center justify-center">
+          <div className="bg-radial from-sidebar-accent to bg-sidebar relative hidden md:flex flex-col gap-y-4 items-center justify-center">
             <img
               //	1.	Yellow (#FFD200) → first top shape
               // 2.	Green (#06E07F) → right-bottom shape
